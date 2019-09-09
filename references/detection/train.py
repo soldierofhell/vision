@@ -138,7 +138,7 @@ def main(args):
                 os.path.join(args.output_dir, 'model_{}.pth'.format(epoch)))
 
         # evaluate after every epoch
-        evaluate(model, data_loader_test, device=device)
+        #evaluate(model, data_loader_test, device=device)
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
