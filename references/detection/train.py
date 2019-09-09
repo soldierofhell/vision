@@ -88,7 +88,8 @@ def main(args):
     model = torchvision.models.detection.__dict__[args.model](num_classes=num_classes,
                                                               pretrained=args.pretrained)
     if args.num_classes != num_classes:
-        from torchvision.models.detection.faster_rcnn import FastRCNNPredictor, MaskRCNNPredictor
+        from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
+        from torchvision.models.detection.mask_rcnn import MaskRCNNPredictor
         
         box_in_features = model.roi_heads.box_predictor.cls_score.in_features
         mask_in_features = 256 # model.roi_heads.mask_predictor.mask_fcn_logits.in_features
