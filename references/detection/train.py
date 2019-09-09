@@ -89,7 +89,7 @@ def main(args):
                                                               pretrained=args.pretrained)
     if args.num_classes != num_classes:
         box_in_features = model.roi_heads.box_predictor.cls_score.in_features
-        mask_in_features = model.roi_heads.mask_predictor.mask_fcn_logits.in_features
+        mask_in_features = 256 # model.roi_heads.mask_predictor.mask_fcn_logits.in_features
         print('box_in_features: ', box_in_features)
         print('mask_in_features: ', mask_in_features)
         model.roi_heads.box_predictor = FastRCNNPredictor(box_in_features, args.num_classes)
