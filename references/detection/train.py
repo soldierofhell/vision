@@ -87,6 +87,14 @@ def main(args):
     print("Creating model")
     model = torchvision.models.detection.__dict__[args.model](num_classes=num_classes,
                                                               pretrained=args.pretrained)
+    if args.num_classes != num_classes:
+        box_in_features = model.roi_heads.box_predictor.cls_score.in_features
+        mask_in_features = model.roi_heads.mask_predictor.mask_fcn_logits.in_features
+        print('box_in_features: ', box_in_features)
+        print('mask_in_features: ', mask_in_features)
+        model.roi_heads.box_predictor = FastRCNNPredictor(box_in_features, args.num_classes)
+        model.roi_heads.mask_predictor = MaskRCNNPredictor(mask_in_features, 256, args.num_classes)
+    
     model.to(device)
 
     model_without_ddp = model
@@ -176,6 +184,8 @@ if __name__ == "__main__":
         help="Use pre-trained models from the modelzoo",
         action="store_true",
     )
+    parser.add_argument('--num_classes', default=91, type=int, metavar='N',
+                        help='number of classes')
 
     # distributed training parameters
     parser.add_argument('--world-size', default=1, type=int,
