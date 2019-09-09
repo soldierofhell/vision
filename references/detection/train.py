@@ -84,7 +84,8 @@ def main(args):
         sampler=test_sampler, num_workers=args.workers,
         collate_fn=utils.collate_fn)
     
-    print('aspect_ratio_group_factor: ', args.aspect_ratio_group_factor)
+    print('train dataset length: ', len(dataset))
+    print('RandomSamler length: ', len(train_sampler))
     print('train data_loader length: ', len(data_loader))
 
     print("Creating model")
