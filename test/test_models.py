@@ -3,6 +3,7 @@ from itertools import product
 import torch
 from torchvision import models
 import unittest
+import traceback
 
 
 def get_available_classification_models():
@@ -25,21 +26,20 @@ def get_available_video_models():
     return [k for k, v in models.video.__dict__.items() if callable(v) and k[0].lower() == k[0] and k[0] != "_"]
 
 
-# model_name, expected to script without error
-torchub_models = {
-    "deeplabv3_resnet101": False,
-    "mobilenet_v2": True,
-    "resnext50_32x4d": False,
-    "fcn_resnet101": False,
-    "googlenet": False,
-    "densenet121": False,
-    "resnet18": True,
-    "alexnet": True,
-    "shufflenet_v2_x1_0": True,
-    "squeezenet1_0": True,
-    "vgg11": True,
-    "inception_v3": False,
-}
+torchub_models = [
+    "deeplabv3_resnet101",
+    "mobilenet_v2",
+    "resnext50_32x4d",
+    "fcn_resnet101",
+    "googlenet",
+    "densenet121",
+    "resnet18",
+    "alexnet",
+    "shufflenet_v2_x1_0",
+    "squeezenet1_0",
+    "vgg11",
+    "inception_v3",
+]
 
 
 class Tester(unittest.TestCase):
@@ -47,11 +47,14 @@ class Tester(unittest.TestCase):
         if name not in torchub_models:
             return
         scriptable = True
+        msg = ""
         try:
             torch.jit.script(model)
-        except Exception:
+        except Exception as e:
+            tb = traceback.format_exc()
             scriptable = False
-        self.assertEqual(torchub_models[name], scriptable)
+            msg = str(e) + str(tb)
+        self.assertTrue(scriptable, msg)
 
     def _test_classification_model(self, name, input_shape):
         # passing num_class equal to a number other than 1000 helps in making the test
@@ -145,6 +148,20 @@ class Tester(unittest.TestCase):
         x = torch.rand(1, 3, 224, 224)
         out = model(x)
         self.assertEqual(out.shape[-1], 1000)
+
+    def test_fasterrcnn_double(self):
+        model = models.detection.fasterrcnn_resnet50_fpn(num_classes=50, pretrained_backbone=False)
+        model.double()
+        model.eval()
+        input_shape = (3, 300, 300)
+        x = torch.rand(input_shape, dtype=torch.float64)
+        model_input = [x]
+        out = model(model_input)
+        self.assertIs(model_input[0], x)
+        self.assertEqual(len(out), 1)
+        self.assertTrue("boxes" in out[0])
+        self.assertTrue("scores" in out[0])
+        self.assertTrue("labels" in out[0])
 
 
 for model_name in get_available_classification_models():
