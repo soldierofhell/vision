@@ -59,6 +59,8 @@ def main(args):
 
     dataset, num_classes = get_dataset(args.dataset, "train", get_transform(train=True), args.data_path)
     dataset_test, _ = get_dataset(args.dataset, "val", get_transform(train=False), args.data_path)
+    
+    print(len(dataset), len(dataset_test))
 
     print("Creating data loaders")
     if args.distributed:
