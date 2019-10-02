@@ -36,7 +36,7 @@ def roi_align(input, boxes, output_size, spatial_scale=1.0, sampling_ratio=-1):
     output_size = _pair(output_size)
     if not isinstance(rois, torch.Tensor):
         rois = convert_boxes_to_roi_format(rois)
-    return torch.ops.torchvision.roi_align(input, rois, spatial_scale,
+    return roi_align(input, rois, spatial_scale,
                                            output_size[0], output_size[1],
                                            sampling_ratio)
 
