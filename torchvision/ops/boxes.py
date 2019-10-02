@@ -28,7 +28,7 @@ def nms(boxes, scores, iou_threshold):
         of the elements that have been kept
         by NMS, sorted in decreasing order of scores
     """
-    return nms(boxes, scores, iou_threshold)
+    return torchvision.ops.nms(boxes, scores, iou_threshold)
 
 
 def batched_nms(boxes, scores, idxs, iou_threshold):
