@@ -109,8 +109,8 @@ def main(args):
 
     # Using FMNIST to demonstrate embedding learning using triplet loss. This dataset can
     # be replaced with any classification dataset.
-    train_dataset = ImageFolder(args.dataset_dir, train=True, transform=transform, download=True)
-    test_dataset = ImageFolder(args.dataset_dir, train=False, transform=transform, download=True)
+    train_dataset = ImageFolder(args.dataset_dir, transform=transform)
+    test_dataset = ImageFolder(args.dataset_dir, transform=transform)
 
     # targets is a list where the i_th element corresponds to the label of i_th dataset element.
     # This is required for PKSampler to randomly sample from exactly p classes. You will need to
