@@ -116,7 +116,7 @@ def main(args):
     # This is required for PKSampler to randomly sample from exactly p classes. You will need to
     # construct targets while building your dataset. Some datasets (such as ImageFolder) have a
     # targets attribute with the same format.
-    targets = train_dataset.targets.tolist()
+    targets = train_dataset.targets
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size,
                               sampler=PKSampler(targets, p, k),
