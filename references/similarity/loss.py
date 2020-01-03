@@ -78,8 +78,6 @@ def batch_all_triplet_loss(labels, embeddings, margin, p):
 def _get_triplet_mask(labels):
     # Check that i, j and k are distinct
     
-    print(labels)
-    
     indices_equal = torch.eye(labels.size(0), dtype=torch.uint8, device=labels.device)
     indices_not_equal = ~indices_equal
     i_not_equal_j = indices_not_equal.unsqueeze(2)
