@@ -7,7 +7,7 @@ class EmbeddingNet(nn.Module):
     def __init__(self, backbone=None):
         super(EmbeddingNet, self).__init__()
         if backbone is None:
-            backbone = models.resnet50(num_classes=128)
+            backbone = models.resnet101(num_classes=128)
 
         self.backbone = backbone
 
