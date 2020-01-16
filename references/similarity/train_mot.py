@@ -104,7 +104,7 @@ def main(args):
     optimizer = Adam(model.parameters(), lr=args.lr)
 
     train_transform = transforms.Compose([transforms.Lambda(lambda image: image.convert('RGB')),
-                                    transforms.RandomHorizontalFlip()
+                                    transforms.RandomHorizontalFlip(),
                                     transforms.Resize((224, 224)),
                                     transforms.ToTensor()])
     
