@@ -103,14 +103,19 @@ def main(args):
     criterion = TripletMarginLoss(margin=args.margin)
     optimizer = Adam(model.parameters(), lr=args.lr)
 
-    transform = transforms.Compose([transforms.Lambda(lambda image: image.convert('RGB')),
+    train_transform = transforms.Compose([transforms.Lambda(lambda image: image.convert('RGB')),
+                                    transforms.RandomHorizontalFlip()
                                     transforms.Resize((224, 224)),
                                     transforms.ToTensor()])
+    
+    test_transform = transforms.Compose([transforms.Lambda(lambda image: image.convert('RGB')),
+                                    transforms.Resize((224, 224)),
+                                    transforms.ToTensor()])    
 
     # Using FMNIST to demonstrate embedding learning using triplet loss. This dataset can
     # be replaced with any classification dataset.
-    train_dataset = ImageFolder(os.path.join(args.dataset_dir, 'train'), transform=transform)
-    test_dataset = ImageFolder(os.path.join(args.dataset_dir, 'test'), transform=transform)
+    train_dataset = ImageFolder(os.path.join(args.dataset_dir, 'train'), transform=train_transform)
+    test_dataset = ImageFolder(os.path.join(args.dataset_dir, 'test'), transform=test_transform)
 
     # targets is a list where the i_th element corresponds to the label of i_th dataset element.
     # This is required for PKSampler to randomly sample from exactly p classes. You will need to
