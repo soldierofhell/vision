@@ -66,9 +66,7 @@ def find_best_threshold(dists, targets, device):
             f1 = 2 * precision * recall / (precision + recall)
         else:
             f1 = 0
-        
-        print(accuracy, precision, recall, f1)
-
+            
         if best_results is None or best_results['f1'] < f1:
             best_results = {
                 'threshold': thresh,
