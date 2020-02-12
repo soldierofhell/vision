@@ -7,7 +7,7 @@ class EmbeddingNet(nn.Module):
     def __init__(self, backbone=None):
         super(EmbeddingNet, self).__init__()
         if backbone is None:
-            model = ResNet(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=128)
+            model = models.resnet.ResNet(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=128)
             state_dict = load_state_dict_from_url(model_urls['resnet50'],
                                               progress=True)
             for key in list(state_dict.keys):
