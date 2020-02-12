@@ -10,7 +10,7 @@ class EmbeddingNet(nn.Module):
             model = models.resnet.ResNet(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=128)
             state_dict = models.utils.load_state_dict_from_url(models.resnet.model_urls['resnet50'],
                                               progress=True)
-            for key in list(state_dict.keys):
+            for key in list(state_dict.keys()):
                 if key in ["fc.weight", "fc.bias"]:
                     state_dict.pop(key)
             
