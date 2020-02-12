@@ -62,7 +62,10 @@ def find_best_threshold(dists, targets, device):
         num_samples = dists.size(0)
         accuracy /= num_samples
 
-        f1 = 2 * precision * recall / (precision + recall)
+        if (precision + recall)>0:
+            f1 = 2 * precision * recall / (precision + recall)
+        else:
+            f1 = 0
         
         print(accuracy, precision, recall, f1)
 
