@@ -39,18 +39,29 @@ def train_epoch(model, optimizer, criterion, data_loader, device, epoch, print_f
 
 
 def find_best_threshold(dists, targets, device):
-    best_thresh = 0.01
-    best_correct = 0
+    best_results = None
+
     for thresh in torch.arange(0.0, 1.51, 0.01):
         predictions = dists <= thresh.to(device)
-        correct = torch.sum(predictions == targets.to(device)).item()
-        if correct > best_correct:
-            best_thresh = thresh
-            best_correct = correct
 
-    accuracy = 100.0 * best_correct / dists.size(0)
+        accuracy = torch.sum(predictions == targets.to(device)).item()
+        recall = torch.sum(predictions[targets == True]).item()
 
-    return best_thresh, accuracy
+        num_samples = dists.size(0)
+        accuracy /= num_samples
+        recall /= num_samples
+
+        f1 = 2 * accuracy * recall / (accuracy + recall)
+
+        if best_results is None or best_results['f1'] < f1:
+            best_results = {
+                'threshold': thresh,
+                'accuracy': accuracy,
+                'recall': recall,
+                'f1': f1,
+            }
+
+    return best_results
 
 
 @torch.no_grad()
@@ -77,9 +88,10 @@ def evaluate(model, loader, device):
     dists = dists[mask == 1]
     targets = targets[mask == 1]
 
-    threshold, accuracy = find_best_threshold(dists, targets, device)
+    results = find_best_threshold(dists, targets, device)
 
-    print('accuracy: {:.3f}%, threshold: {:.2f}'.format(accuracy, threshold))
+    print('threshold: {threshold:.2f} accuracy: {accuracy:.2%}'
+          ' recall: {recall:.2%} f1: {f1:.2f}'.format(**results)) 
 
 
 def save(model, epoch, save_dir, file_name):
