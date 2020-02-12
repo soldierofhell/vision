@@ -45,18 +45,23 @@ def find_best_threshold(dists, targets, device):
         predictions = dists <= thresh.to(device)
 
         accuracy = torch.sum(predictions == targets.to(device)).item()
-        recall = torch.sum(predictions[targets == True]).item()
+        
+        targets_true = targets.to(device) == True 
+        predictions_true = predictions == True 
+        
+        precision = torch.sum(targets.to(device)[predictions_true]).item()/torch.sum(predictions_true) # TP / (TP + FP)
+        recall = torch.sum(predictions[targets_true]).item()/torch.sum(targets_true) # TP / (TP + FN)
 
         num_samples = dists.size(0)
         accuracy /= num_samples
-        recall /= num_samples
 
-        f1 = 2 * accuracy * recall / (accuracy + recall)
+        f1 = 2 * precision * recall / (precision + recall)
 
         if best_results is None or best_results['f1'] < f1:
             best_results = {
                 'threshold': thresh,
                 'accuracy': accuracy,
+                'precision': precision,
                 'recall': recall,
                 'f1': f1,
             }
@@ -91,7 +96,7 @@ def evaluate(model, loader, device):
     results = find_best_threshold(dists, targets, device)
 
     print('threshold: {threshold:.2f} accuracy: {accuracy:.2%}'
-          ' recall: {recall:.2%} f1: {f1:.2f}'.format(**results)) 
+          ' precision: {precision:.2%} recall: {recall:.2%} f1: {f1:.2f}'.format(**results)) 
 
 
 def save(model, epoch, save_dir, file_name):
