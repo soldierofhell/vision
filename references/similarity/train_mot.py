@@ -54,7 +54,7 @@ def find_best_threshold(dists, targets, device):
         else:
             precision = 0
             
-        if torch.sum(predictions_true).item()>0:
+        if torch.sum(targets_true).item()>0:
             recall = torch.sum(predictions[targets_true]).item()/torch.sum(targets_true).item() # TP / (TP + FN)
         else:
             recall = 0
