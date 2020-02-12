@@ -8,7 +8,7 @@ class EmbeddingNet(nn.Module):
         super(EmbeddingNet, self).__init__()
         if backbone is None:
             model = models.resnet.ResNet(models.resnet.Bottleneck, [3, 4, 6, 3], num_classes=128)
-            state_dict = load_state_dict_from_url(model_urls['resnet50'],
+            state_dict = models.utils.load_state_dict_from_url(model_urls['resnet50'],
                                               progress=True)
             for key in list(state_dict.keys):
                 if key in ["fc.weight", "fc.bias"]:
