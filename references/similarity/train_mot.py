@@ -49,13 +49,15 @@ def find_best_threshold(dists, targets, device):
         targets_true = targets.to(device) == True 
         predictions_true = predictions == True 
         
-        precision = torch.sum(targets.to(device)[predictions_true]).item()/torch.sum(predictions_true) # TP / (TP + FP)
-        recall = torch.sum(predictions[targets_true]).item()/torch.sum(targets_true) # TP / (TP + FN)
+        precision = torch.sum(targets.to(device)[predictions_true]).item()/torch.sum(predictions_true).item() # TP / (TP + FP)
+        recall = torch.sum(predictions[targets_true]).item()/torch.sum(targets_true).item() # TP / (TP + FN)
 
         num_samples = dists.size(0)
         accuracy /= num_samples
 
         f1 = 2 * precision * recall / (precision + recall)
+        
+        print(accuracy, precision, recall, f1)
 
         if best_results is None or best_results['f1'] < f1:
             best_results = {
