@@ -42,30 +42,22 @@ def find_best_threshold(dists, targets, device):
     best_results = None
 
     for thresh in torch.arange(0.0, 1.51, 0.01):
-        predictions = dists <= thresh.to(device)
-
-        accuracy = torch.sum(predictions == targets.to(device)).item()
         
-        targets_true = targets.to(device) == True 
-        predictions_true = predictions == True 
+        thresh = thresh.to(device)
+        targets = targets.to(device)
+
+        predictions = dists <= thresh
+
+        accuracy = torch.mean((predictions == targets).float()).item()
         
-        if torch.sum(predictions_true).item()>0:
-            precision = torch.sum(targets.to(device)[predictions_true]).item()/torch.sum(predictions_true).item() # TP / (TP + FP)
+        if torch.sum(predictions) == 0:
+            precision = 0.0
+            recall = 0.0
+            f1 = 0.0
         else:
-            precision = 0
-            
-        if torch.sum(targets_true).item()>0:
-            recall = torch.sum(predictions[targets_true]).item()/torch.sum(targets_true).item() # TP / (TP + FN)
-        else:
-            recall = 0
-
-        num_samples = dists.size(0)
-        accuracy /= num_samples
-
-        if (precision + recall)>0:
+            precision = torch.mean(targets[predictions].float()).item()
+            recall = torch.mean(predictions[targets].float()).item()
             f1 = 2 * precision * recall / (precision + recall)
-        else:
-            f1 = 0
             
         if best_results is None or best_results['f1'] < f1:
             best_results = {
