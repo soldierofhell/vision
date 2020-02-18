@@ -114,6 +114,7 @@ def main(args):
     batch_size = p * k
 
     model = EmbeddingNet(backbone=None, pretrained=args.pretrained)
+    print('pretrained: ', args.pretrained)
     if args.resume:
         model.load_state_dict(torch.load(args.resume))
 
