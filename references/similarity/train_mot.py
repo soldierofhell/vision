@@ -181,7 +181,6 @@ def parse_args():
     parser.add_argument('--save-dir', default='.', help='Model save directory')
     parser.add_argument('--resume', default='', help='Resume from checkpoint')
     parser.add_argument("--pretrained", action="store_true")
-    )
 
     return parser.parse_args()
 
