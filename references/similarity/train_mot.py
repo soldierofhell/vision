@@ -113,7 +113,7 @@ def main(args):
     k = args.samples_per_label
     batch_size = p * k
 
-    model = EmbeddingNet()
+    model = EmbeddingNet(backbone=None, pretrained=args.pretrained)
     if args.resume:
         model.load_state_dict(torch.load(args.resume))
 
@@ -180,6 +180,8 @@ def parse_args():
     parser.add_argument('--print-freq', default=20, type=int, help='Print frequency')
     parser.add_argument('--save-dir', default='.', help='Model save directory')
     parser.add_argument('--resume', default='', help='Resume from checkpoint')
+    parser.add_argument("--pretrained", action="store_true")
+    )
 
     return parser.parse_args()
 
