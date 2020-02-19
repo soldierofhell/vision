@@ -5,7 +5,7 @@ from .model import EmbeddingNet
 
 class Predictor:
 
-  def __init__(self, checkpoint_path, threshold):
+  def __init__(self, checkpoint_path):
 
     self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
