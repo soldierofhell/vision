@@ -20,7 +20,7 @@ class Predictor:
                                 transforms.ToTensor()])
 
   def _preprocess(self, image):
-    image = transforms.ToPILImage()(image).convert("L")
+    image = transforms.ToPILImage()(image)
     image = self.transform(image)
     
     return image
