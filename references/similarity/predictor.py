@@ -61,7 +61,7 @@ class TensorPredictor:
     
     for image_tensor in image_list:
       image_tensor = torch.index_select(image_tensor, 2, torch.tensor([2, 1, 0], device=self.device))  # BGR -> RBG ?
-      image_tensor = F.interpolate(image_tensor, size=(224, 224))
+      image_tensor = F.interpolate(torch.unsqueeze(image_tensor,0), size=(224, 224))
       tensor_list.append(image_tensor)
     
     input_tensor = torch.stack(tensor_list)
