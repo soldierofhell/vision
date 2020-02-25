@@ -66,6 +66,6 @@ class TensorPredictor:
 
     with torch.no_grad():
       input_tensor = input_tensor.to(self.device)      
-      embedings = model(input_tensor)
+      embeddings = model(input_tensor)
       
-    return embedings
+    return embeddings
