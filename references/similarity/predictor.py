@@ -61,13 +61,13 @@ class TensorPredictor:
     
     for image_tensor in image_list:
       image_tensor = torch.index_select(image_tensor, 2, torch.tensor([2, 1, 0], device=self.device))  # BGR -> RBG ?
-      image_tensor = F.interpolate(torch.unsqueeze(image_tensor,0), size=(224, 224))
+      image_tensor = F.interpolate(torch.unsqueeze(image_tensor,0), size=(224, 224))[0]
       tensor_list.append(image_tensor)
     
     input_tensor = torch.stack(tensor_list)
 
     with torch.no_grad():
       input_tensor = input_tensor.to(self.device)      
-      embeddings = model(input_tensor)
+      embeddings = self.model(input_tensor)
       
     return embeddings
