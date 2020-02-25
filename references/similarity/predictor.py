@@ -1,6 +1,8 @@
 import torch
 import torchvision.transforms as transforms
 
+import torch.nn.functional as F
+
 from .model import EmbeddingNet
 
 class Predictor:
