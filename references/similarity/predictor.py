@@ -3,7 +3,10 @@ import torchvision.transforms as transforms
 
 import torch.nn.functional as F
 
-from .model import EmbeddingNet
+try:
+  from .model import EmbeddingNet
+except ImportError:
+  from model import EmbeddingNet
 
 class Predictor:
 
