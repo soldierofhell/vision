@@ -37,7 +37,7 @@ class Predictor:
 
     with torch.no_grad():
       image_tensor = image_tensor.cuda()      
-      embedings = model(image_tensor)
+      embedings = self.model(image_tensor)
       
     return embedings.cpu().numpy()
       
